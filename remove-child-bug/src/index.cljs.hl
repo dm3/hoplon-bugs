@@ -1,0 +1,15 @@
+(page "index.html"
+  (:require [jquery.autocomplete :as auto]))
+
+(defc completed nil)
+
+(html
+  (head
+    (link :rel "stylesheet", :href "/css/jquery-ui.min.inc.css"))
+  (body
+    (h1 "Hello, Hoplon!")
+    (h2 (text "Got '~{completed}'"))
+    (auto/autocomplete
+      :state completed
+      :source (fn [q cb] (cb (clj->js [{:id "a", :value "aaaaaaaa"}
+                                       {:id "b", :value "bbbbbbbb"}]))))))

@@ -1,0 +1,20 @@
+(ns jquery.autocomplete
+  (:require [cljsjs.jquery-ui]))
+
+(defn create [elem opts]
+  (.autocomplete elem (clj->js (or opts {}))))
+
+(defn destroy [elem]
+  (with-let [e elem]
+    (when-let [i (.autocomplete e "instance")]
+      (.destroy i))))
+
+(defelem autocomplete
+  [{:keys [state] :as opts} kids]
+  (with-let [elem (input :type "text" kids)]
+    (let [opts (cell= (dissoc opts :state :id :class))]
+      (on! elem :autocompletechange
+           (fn [e ui]
+             (reset! state (js->clj (.-item ui)))))
+      (with-init!
+        (cell= (doto (js/jQuery elem) destroy (create opts)))))))
